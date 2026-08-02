@@ -1,0 +1,5 @@
+__pycache__/
+venv/
+.env
+Masa_1_QR.png
+ngrok.exe

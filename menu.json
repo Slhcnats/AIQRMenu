@@ -1,0 +1,62 @@
+{
+  "kategoriler": [
+    {
+      "isim": "Başlangıçlar",
+      "urunler": [
+        {"isim": "Geleneksel Humus", "fiyat": 95, "kalori": 210, "alerjenler": ["susam"], "etiketler": ["vegan", "glutensiz"]},
+        {"isim": "Paçanga Böreği", "fiyat": 125, "kalori": 380, "alerjenler": ["gluten", "süt"], "etiketler": []},
+        {"isim": "Kabak Tarator", "fiyat": 85, "kalori": 150, "alerjenler": ["süt", "ceviz"], "etiketler": ["vejetaryen", "glutensiz"]},
+        {"isim": "Trüf Mantarlı Patates", "fiyat": 110, "kalori": 420, "alerjenler": [], "etiketler": ["vegan"]},
+        {"isim": "Çıtır Kalamar", "fiyat": 180, "kalori": 310, "alerjenler": ["gluten", "deniz ürünleri"], "etiketler": []}
+      ]
+    },
+    {
+      "isim": "Salatalar",
+      "urunler": [
+        {"isim": "Kinoalı Avokado Salata", "fiyat": 165, "kalori": 280, "alerjenler": [], "etiketler": ["vegan", "glutensiz", "sağlıklı"]},
+        {"isim": "Klasik Sezar Salata", "fiyat": 185, "kalori": 450, "alerjenler": ["gluten", "süt", "yumurta"], "etiketler": ["yüksek protein"]},
+        {"isim": "Roka ve Tulum Peynirli Salata", "fiyat": 150, "kalori": 320, "alerjenler": ["süt", "ceviz"], "etiketler": ["vejetaryen", "glutensiz"]}
+      ]
+    },
+    {
+      "isim": "Ana Yemekler",
+      "urunler": [
+        {"isim": "Antigravity Trüflü Burger", "fiyat": 320, "kalori": 850, "alerjenler": ["gluten", "süt", "yumurta"], "etiketler": []},
+        {"isim": "Köri Soslu Tavuk", "fiyat": 240, "kalori": 520, "alerjenler": ["süt"], "etiketler": ["yüksek protein", "glutensiz"]},
+        {"isim": "Acılı Thai Noodle", "fiyat": 220, "kalori": 580, "alerjenler": ["gluten", "soya", "yer fıstığı"], "etiketler": ["acılı", "vejetaryen"]},
+        {"isim": "Glutensiz Izgara Tavuk Kasesi", "fiyat": 260, "kalori": 410, "alerjenler": [], "etiketler": ["glutensiz", "yüksek protein", "sağlıklı"]},
+        {"isim": "Dana Lokum Fajita", "fiyat": 410, "kalori": 650, "alerjenler": ["gluten", "soya"], "etiketler": ["yüksek protein"]},
+        {"isim": "Fırınlanmış Somon", "fiyat": 380, "kalori": 480, "alerjenler": ["balık"], "etiketler": ["glutensiz", "sağlıklı"]}
+      ]
+    },
+    {
+      "isim": "Tatlılar",
+      "urunler": [
+        {"isim": "Orman Meyveli San Sebastian", "fiyat": 160, "kalori": 480, "alerjenler": ["süt", "yumurta"], "etiketler": ["vejetaryen"]},
+        {"isim": "Vegan Islak Brownie", "fiyat": 140, "kalori": 320, "alerjenler": ["ceviz", "soya"], "etiketler": ["vegan", "glutensiz"]},
+        {"isim": "İtalyan Tiramisu", "fiyat": 150, "kalori": 410, "alerjenler": ["gluten", "süt", "yumurta", "kahve"], "etiketler": ["vejetaryen"]},
+        {"isim": "Fırın Sütlaç", "fiyat": 90, "kalori": 280, "alerjenler": ["süt"], "etiketler": ["vejetaryen", "glutensiz"]}
+      ]
+    },
+    {
+      "isim": "Sıcak İçecekler",
+      "urunler": [
+        {"isim": "Taze Demleme Çay", "fiyat": 25, "kalori": 0, "alerjenler": [], "etiketler": ["vegan"]},
+        {"isim": "Geleneksel Türk Kahvesi", "fiyat": 50, "kalori": 5, "alerjenler": [], "etiketler": ["vegan"]},
+        {"isim": "Filtre Kahve", "fiyat": 75, "kalori": 5, "alerjenler": [], "etiketler": ["vegan"]},
+        {"isim": "Karamel Macchiato", "fiyat": 115, "kalori": 250, "alerjenler": ["süt"], "etiketler": ["vejetaryen"]},
+        {"isim": "Yulaf Sütlü Latte", "fiyat": 125, "kalori": 110, "alerjenler": ["gluten"], "etiketler": ["vegan"]},
+        {"isim": "Sıcak Çikolata", "fiyat": 110, "kalori": 350, "alerjenler": ["süt"], "etiketler": ["vejetaryen"]}
+      ]
+    },
+    {
+      "isim": "Soğuk İçecekler",
+      "urunler": [
+        {"isim": "Orman Meyveli Kombucha", "fiyat": 95, "kalori": 45, "alerjenler": [], "etiketler": ["vegan", "sağlıklı", "glutensiz"]},
+        {"isim": "Buzlu Mocha", "fiyat": 120, "kalori": 280, "alerjenler": ["süt"], "etiketler": ["vejetaryen"]},
+        {"isim": "Ev Yapımı Limonata", "fiyat": 80, "kalori": 120, "alerjenler": [], "etiketler": ["vegan"]},
+        {"isim": "Taze Sıkma Portakal Suyu", "fiyat": 95, "kalori": 110, "alerjenler": [], "etiketler": ["vegan"]}
+      ]
+    }
+  ]
+}
