@@ -98,10 +98,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* YENİ: Açılır/Kapanır (Accordion) Kategori Stilleri */
-        .category-wrapper {
-            margin-bottom: 5px;
-        }
+        .category-wrapper { margin-bottom: 5px; }
         .category-header { 
             width: 100%;
             background: transparent;
@@ -125,10 +122,7 @@
         .category-header:hover, .category-header.active { color: var(--primary); }
         .toggle-icon { font-size: 1.5rem; font-weight: 400; color: var(--gold); transition: transform 0.3s;}
         
-        .category-content {
-            padding: 0 5px;
-            display: none; /* Varsayılan olarak kapalı */
-        }
+        .category-content { padding: 0 5px; display: none; }
 
         .menu-item { 
             display: flex; 
@@ -146,16 +140,14 @@
             letter-spacing: 0.5px;
             color: var(--text-main);
         }
-        .item-price { 
-            font-weight: 500; 
-            color: var(--text-main); 
-            font-size: 0.95rem; 
-            font-style: italic; 
-        }
+        .item-price { font-weight: 500; color: var(--text-main); font-size: 0.95rem; font-style: italic; }
 
         /* Yapay Zeka & Hizmetler Stilleri */
         .chat-box { padding: 20px 25px; display: flex; flex-direction: column; gap: 15px; height: calc(100% - 150px); overflow-y: auto; }
-        .message { padding: 14px 18px; border-radius: 2px; max-width: 85%; line-height: 1.6; font-size: 0.95rem; }
+        
+        /* GÜNCELLENDİ: white-space: pre-wrap eklendi (AI satır atlamalarını algılaması için) */
+        .message { padding: 14px 18px; border-radius: 2px; max-width: 85%; line-height: 1.6; font-size: 0.95rem; white-space: pre-wrap; }
+        
         .bot { background-color: rgba(255,255,255,0.8); border-left: 3px solid var(--primary); align-self: flex-start; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
         .user { background-color: var(--primary); color: white; align-self: flex-end; border-right: 3px solid var(--gold); }
         .input-area { display: flex; padding: 15px 20px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); border-top: 1px solid var(--border); position: absolute; bottom: 65px; width: 100%; box-sizing: border-box; }
@@ -173,27 +165,28 @@
 
         .toast { visibility: hidden; min-width: 200px; background-color: var(--text-main); color: #fff; text-align: center; padding: 12px; position: absolute; left: 50%; transform: translateX(-50%); bottom: 90px; z-index: 100; opacity: 0; transition: opacity 0.3s; font-style: italic; }
         .toast.show { visibility: visible; opacity: 1; }
+
+        /* YENİ: Düşünüyor animasyonu için */
+        .loading-dots { display: inline-block; animation: blink 1.4s infinite both; }
+        .loading-dots:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0% { opacity: 0.2; } 20% { opacity: 1; } 100% { opacity: 0.2; } }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    
-    <!-- === KAFE ADINI BURADAN DEĞİŞTİREBİLİRSİNİZ === -->
     <div class="header">
         AI QR Menü
         <span class="header-subtitle">Restoran & Cafe</span>
     </div>
-    <!-- ============================================= -->
 
     <!-- 1. Klasik Menü Sekmesi -->
     <div id="tab-menu" class="tab-content active">
         <div class="search-container">
             <input type="text" id="menu-search" class="search-input" placeholder="Menüde lezzet arayın..." onkeyup="menudeAra()">
         </div>
-        <div class="menu-container" id="menu-list">
-            <!-- Menü buraya açılır kapanır şekilde eklenecek -->
-        </div>
+        <div class="menu-container" id="menu-list"></div>
     </div>
 
     <!-- 2. Yapay Zeka Sekmesi -->
@@ -202,7 +195,7 @@
             <div class="message bot">Size özel lezzetlerimizi keşfetmek için bana ne tür tatlardan hoşlandığınızı, alerjilerinizi veya diyetinizi söyleyebilirsiniz.</div>
         </div>
         <div class="input-area">
-            <input type="text" id="user-input" class="ai-input" placeholder="Örn: Gluten intoleransım var..." onkeypress="if(event.key === 'Enter') mesajGonder()">
+            <input type="text" id="user-input" class="ai-input" placeholder="Örn: Acıktım, ne önerirsin?" onkeypress="if(event.key === 'Enter') mesajGonder()">
             <button class="send-btn" onclick="mesajGonder()">Sor</button>
         </div>
     </div>
@@ -234,8 +227,7 @@
             const menuList = document.getElementById('menu-list');
             
             data.kategoriler.forEach((kategori, index) => {
-                // Sadece ilk kategori (Başlangıçlar) açık gelsin, diğerleri kapalı olsun
-                let acikMi = (index === 0);
+                let acikMi = false;
                 
                 let html = `
                     <div class="category-wrapper">
@@ -257,7 +249,7 @@
                     `;
                 });
                 
-                html += `</div></div>`; // Kategori bitişi
+                html += `</div></div>`;
                 menuList.innerHTML += html;
             });
         } catch (error) {
@@ -266,7 +258,6 @@
     }
     menuyuGetir();
 
-    // YENİ: Kategori Açma/Kapatma Fonksiyonu
     function kategoriGosterGizle(btn) {
         btn.classList.toggle("active");
         let icerik = btn.nextElementSibling;
@@ -281,7 +272,6 @@
         }
     }
 
-    // GÜNCELLENDİ: Akıllı Arama (Aranan öğe bulununca kategoriyi otomatik açar)
     function menudeAra() {
         let input = document.getElementById('menu-search').value.toLowerCase();
         let wrappers = document.getElementsByClassName('category-wrapper');
@@ -307,13 +297,12 @@
             if (input !== "") {
                 if (hasVisibleItem) {
                     w.style.display = "block";
-                    content.style.display = "block"; // Sonuç varsa otomatik aç
+                    content.style.display = "block";
                     icon.textContent = "−";
                 } else {
-                    w.style.display = "none"; // Sonuç yoksa kategoriyi tamamen gizle
+                    w.style.display = "none";
                 }
             } else {
-                // Arama kutusu silindiğinde her şeyi başa sar
                 w.style.display = "block";
                 content.style.display = "none"; 
                 icon.textContent = "+";
@@ -329,12 +318,37 @@
         element.classList.add('active');
     }
 
+    // YENİ: Daktilo Efekti Fonksiyonu
+    function typeWriter(text, index, element) {
+        if (index < text.length) {
+            element.textContent += text.charAt(index);
+            
+            // Metin uzadıkça ekranı aşağı kaydır
+            const chatBox = document.getElementById("chat-box");
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            setTimeout(() => typeWriter(text, index + 1, element), 20); // 20ms: İdeal yazma hızı
+        }
+    }
+
+    // GÜNCELLENDİ: Düşünüyor efekti ve gecikmeli daktilo eklendi
     async function mesajGonder() {
         const inputField = document.getElementById("user-input");
         const soru = inputField.value.trim();
         if (!soru) return;
+        
         mesajEkle(soru, 'user');
         inputField.value = '';
+        
+        const chatBox = document.getElementById("chat-box");
+        
+        // 1. Düşünüyor balonunu oluştur
+        const loadingMessage = document.createElement("div");
+        loadingMessage.classList.add("message", "bot");
+        loadingMessage.innerHTML = "<em>Lezzet uzmanımız düşünüyor<span class='loading-dots'>.</span><span class='loading-dots'>.</span><span class='loading-dots'>.</span></em>";
+        chatBox.appendChild(loadingMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
         try {
             const response = await fetch("/sor", {
                 method: "POST",
@@ -342,9 +356,15 @@
                 body: JSON.stringify({ soru: soru })
             });
             const data = await response.json();
-            mesajEkle(data.asistan_cevabi, 'bot');
+            
+            // 2. Groq anında cevap verse bile 1.2 saniye yapay gecikme (insansı his)
+            setTimeout(() => {
+                loadingMessage.innerHTML = ""; // Düşünüyor yazısını temizle
+                typeWriter(data.asistan_cevabi, 0, loadingMessage); // Daktiloyu başlat
+            }, 1200);
+
         } catch (error) {
-            mesajEkle("Bağlantı hatası.", 'bot');
+            loadingMessage.innerHTML = "Bağlantı hatası.";
         }
     }
 
