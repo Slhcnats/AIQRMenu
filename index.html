@@ -203,9 +203,10 @@
     <!-- 3. Hizmetler Sekmesi -->
     <div id="tab-services" class="tab-content">
         <div class="services-container">
-            <div class="service-btn" onclick="bildirimGoster('Garson çağrıldı.')">Garson Çağır</div>
-            <div class="service-btn" onclick="bildirimGoster('Hesap talebi alındı.')">Hesap İste</div>
-            <div class="service-btn" onclick="bildirimGoster('Temizlik talebi iletildi.')">Masayı Temizlet</div>
+            <!-- Tıklanınca yeni cagriGonder fonksiyonunu çalıştıracak -->
+            <div class="service-btn" onclick="cagriGonder('Garson Çağrısı')">Garson Çağır</div>
+            <div class="service-btn" onclick="cagriGonder('Hesap İsteği')">Hesap İste</div>
+            <div class="service-btn" onclick="cagriGonder('Masa Temizliği')">Masayı Temizlet</div>
         </div>
     </div>
 
@@ -382,6 +383,22 @@
         toast.textContent = mesaj;
         toast.className = "toast show";
         setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+    // YENİ: Masadan kasaya çağrı gönderen fonksiyon
+    async function cagriGonder(talep) {
+        // İleride QR koda göre değişecek, şimdilik sabit masa numarası veriyoruz
+        let masaNo = "Masa 1"; 
+        
+        try {
+            await fetch('/api/cagri', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ masa_no: masaNo, talep: talep })
+            });
+            bildirimGoster(talep + ' Kasa Ekranına İletildi.');
+        } catch (error) {
+            bildirimGoster('Bağlantı hatası.');
+        }
     }
 </script>
 

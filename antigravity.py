@@ -1,79 +1,133 @@
 import json
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 from groq import Groq
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-# 1. API Anahtarı ve Groq Kurulumu
+# 1. API Anahtarı ve Kurulum
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=api_key)
 
-# 2. FastAPI Uygulamasını Başlatıyoruz
-app = FastAPI(title="Antigravity API", description="AI Destekli QR Menü Asistanı")
+app = FastAPI(title="AI QR Menü", description="AI Destekli QR Menü ve Çağrı Sistemi")
 
-# 3. Menüyü Yüklüyoruz
+# --- YENİ: ÇAĞRILARI TUTACAĞIMIZ RAM LİSTESİ ---
+aktif_cagrilar = []
+cagri_id_sayaci = 1
+
+# Menü Yükleme
 def menuyu_yukle(dosya_yolu):
     with open(dosya_yolu, 'r', encoding='utf-8') as dosya:
         return json.load(dosya)
 
 menu_verisi = menuyu_yukle('menu.json')
-print("⚡ Web Sunucusu ve Yapay Zeka Motoru Hazır!")
+print("⚡ Web Sunucusu, Yapay Zeka ve Çağrı Merkezi Hazır!")
 
-# 4. Veri Modeli: Dışarıdan (telefondan/siteden) gelecek verinin şeklini belirliyoruz
+# --- VERİ MODELLERİ ---
 class MusteriSorusu(BaseModel):
     soru: str
 
-# Ana sayfaya girildiğinde HTML arayüzümüzü göster
+class CagriIstegi(BaseModel):
+    masa_no: str
+    talep: str
+
+# --- SAYFALAR (FRONTEND) ---
 @app.get("/")
 def ana_sayfa():
     return FileResponse("index.html")
 
-# EKSİK OLAN KISIM EKLENDİ: Arayüzün menüyü okumasını sağlayan uç nokta
+@app.get("/admin")
+def admin_sayfasi():
+    return FileResponse("admin.html")
+
+# --- API UÇ NOKTALARI ---
 @app.get("/api/menu")
 def menuyu_getir():
     return menu_verisi
 
-# 5. API Uç Noktası (POST İsteği Dinleyicisi)
+# YENİ: Admin panelinden gelen güncellenmiş menüyü kaydetme
+@app.post("/api/menu/guncelle")
+def menuyu_guncelle(yeni_menu: dict):
+    global menu_verisi # RAM'deki veriyi kullan
+    
+    try:
+        # 1. Yeni menüyü menu.json dosyasına yazıp kalıcı hale getiriyoruz
+        with open('menu.json', 'w', encoding='utf-8') as dosya:
+            json.dump(yeni_menu, dosya, ensure_ascii=False, indent=2)
+            
+        # 2. Sistemdeki aktif menüyü güncelliyoruz (Böylece AI da yeni menüyü öğrenmiş oluyor)
+        menu_verisi = yeni_menu
+        
+        return {"durum": "basarili", "mesaj": "Menü başarıyla güncellendi"}
+    except Exception as e:
+        return {"durum": "hata", "mesaj": str(e)}
+
+# YENİ: Müşteriden gelen çağrıyı kaydet
+@app.post("/api/cagri")
+def cagri_olustur(istek: CagriIstegi):
+    global cagri_id_sayaci
+    yeni_cagri = {
+        "id": cagri_id_sayaci,
+        "masa_no": istek.masa_no,
+        "talep": istek.talep,
+        "zaman": datetime.now().strftime("%H:%M")
+    }
+    aktif_cagrilar.append(yeni_cagri)
+    cagri_id_sayaci += 1
+    return {"durum": "basarili"}
+
+# YENİ: Kasa (Admin) ekranına aktif çağrıları gönder
+@app.get("/api/cagrilar")
+def cagrilar_getir():
+    return aktif_cagrilar
+
+# YENİ: Kasa çağrıyı onaylayınca listeden sil
+@app.delete("/api/cagri/{cagri_id}")
+def cagri_tamamla(cagri_id: int):
+    global aktif_cagrilar
+    aktif_cagrilar = [c for c in aktif_cagrilar if c["id"] != cagri_id]
+    return {"durum": "basarili"}
+
+# --- YAPAY ZEKA ---
 @app.post("/sor")
 def asistana_sor(istek: MusteriSorusu):
     sistem_mesaji = f"""
-    Sen "AI QR Menü Restoran & Cafe"nin dijital sipariş asistanısın. 
-    Aşağıdaki kırmızı çizgiler senin mutlak anayasandır. Bunların dışına ÇIKAMAZSIN:
+    Sen, "AI QR Menü Restoran & Cafe" mekanının yapay zeka destekli akıllı garsonusun. Adın "Maison".
+    Aşağıdaki kurallar senin mutlak anayasandır:
 
-    1. KİMLİK VE SINIRLAR: 
-    - Sen bir insan DEĞİLSİN. Dijital bir kodsun. 
-    - "Nerede oturuyorsun?", "Nasılsın?", "Adın ne?" gibi sorulara SADECE: "Ben dijital bir asistanım, size sadece menümüz hakkında yardımcı olabilirim." şeklinde cevap ver.
+    1. İNSANİ İLİŞKİLER VE SELAMLAŞMA (ÇOK ÖNEMLİ):
+    - Müşteri sana "Merhaba", "Selam", "Nasılsın" derse, asla "Ben dijital bir asistanım" gibi robotik duvarlar örüp kestirip atma. 
+    - Önce insani bir refleksle selamını al ve hal hatır sor (Örn: "Merhaba, çok teşekkür ederim iyiyim. Hoş geldiniz, bugün size nasıl yardımcı olabilirim?").
+    - Müşteri "Nerede oturuyorsun?" veya "Yaşın kaç?" gibi kişisel/fiziksel hayatınla ilgili şeyler sorarsa o zaman kibarca mekanın asistanı olduğunu belirt.
 
-    2. SENARYO UYDURMA VE YORUM KATMA YASAĞI (ÇOK ÖNEMLİ):
-    - Müşteri hava durumundan bahsetmedikçe, "Sıcak bir gün için...", "Soğuk havalarda..." gibi laflar ederek KENDİ KENDİNE HAVA DURUMU UYDURMA.
-    - Müşteri sadece "Ne önerirsin?" veya "Başka öneriler" derse, kafandan hikaye yazmadan doğrudan menüden 1-2 farklı ürün öner.
-    - Eğer müşteri GERÇEKTEN yaz ayları veya serinlemek için bir şey isterse KESİNLİKLE sıcak içecek (Çay, Türk Kahvesi) ÖNERME! Sadece "Soğuk İçecekler" öner.
+    2. SENARYO UYDURMA VE HAVA DURUMU YASAĞI:
+    - Müşteri sormadıkça veya hava durumundan bahsetmedikçe kendi kendine senaryo uydurma.
+    - Sadece müşterinin sorduğu soruya odaklan ve menüden doğrudan 1-2 ürün önerip kısa kes.
+    - Yaz aylarında veya serinletmek için bir şey istendiğinde asla sıcak içecek önerme.
 
     3. HALÜSİNASYON YASAĞI:
-    - SADECE aşağıdaki JSON menüsünde olan ürünleri öner. Olmayan hiçbir şeyi uydurma. Yemeklerin içeriğini kafana göre değiştirme.
+    - SADECE aşağıdaki JSON menüsünde olan ürünleri öner. Asla menüde olmayan bir şeyi uydurma.
 
     4. FORMAT VE DİL:
     - ÇOK KISA konuş. Maksimum 1-2 cümle. Sohbeti uzatma.
-    - Madde imleri (-, *, ✔️), kalın yazılar veya listeler KESİNLİKLE KULLANMA. Düz metin halinde, doğal bir insan gibi kısa cümleler kur.
+    - Madde imleri (-, *, ✔️), kalın yazılar veya listeler KESİNLİKLE KULLANMA. Düz metin halinde, doğal bir garson gibi konuş.
     - Müşteri özellikle sormadıkça fiyat ve kalori belirtme. Sadece ürünün adını ver.
 
     İşte Menü Verisi:
     {json.dumps(menu_verisi, ensure_ascii=False, indent=2)}
     """
     
-    # Gelen soruyu Groq API'sine gönderiyoruz
     chat_completion = client.chat.completions.create(
         messages=[
             {"role": "system", "content": sistem_mesaji},
             {"role": "user", "content": istek.soru}
         ],
         model="llama-3.1-8b-instant",
-        temperature=0.1, # YENİ EKLENDİ: Yaratıcılığı kısıldı, uydurması engellendi! (0.0 ile 1.0 arası)
+        temperature=0.1, 
     )
     
-    # Yapay zekanın cevabını dış dünyaya paketleyip gönderiyoruz
     cevap = chat_completion.choices[0].message.content
     return {"asistan_cevabi": cevap}
