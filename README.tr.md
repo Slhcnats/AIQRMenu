@@ -1,5 +1,11 @@
 # AIQRMenu - Yapay Zeka Destekli Akıllı QR Menü Sistemi
 
+🌐 **Dil**
+
+[🇬🇧 English](README.md) | 🇹🇷 Türkçe
+
+---
+
 AIQRMenu, klasik restoran menülerini dijitalleştirerek interaktif bir deneyime dönüştüren, tam teşekküllü (Full-Stack) bir web uygulamasıdır. Müşteriler, masalarındaki QR kodu okutarak sadece ürünleri görmekle kalmaz, aynı zamanda menüye entegre edilmiş yapay zeka asistanı sayesinde kişiselleştirilmiş yemek önerileri alabilirler.
 
 ## Projenin Amacı
