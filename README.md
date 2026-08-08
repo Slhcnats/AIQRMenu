@@ -1,48 +1,86 @@
-# AIQRMenu - Yapay Zeka Destekli Akıllı QR Menü Sistemi
+# AIQRMenu - AI-Powered Smart QR Menu System
 
-AIQRMenu, klasik restoran menülerini dijitalleştirerek interaktif bir deneyime dönüştüren, tam teşekküllü (Full-Stack) bir web uygulamasıdır. Müşteriler, masalarındaki QR kodu okutarak sadece ürünleri görmekle kalmaz, aynı zamanda menüye entegre edilmiş yapay zeka asistanı sayesinde kişiselleştirilmiş yemek önerileri alabilirler.
+🌐 **Language**
 
-## Projenin Amacı
+🇬🇧 English | [🇹🇷 Türkçe](README.tr.md)
 
-Geleneksel restoran menülerinde müşterilerin ürün içeriklerini, kalorilerini veya vegan/vejetaryen seçenekleri bulması zaman alır. Bu proje, müşterilerin aradıkları lezzeti saniyeler içinde filtreleyebilmesini ve kararsız kaldıklarında akıllı bir asistana danışabilmesini sağlamak amacıyla geliştirilmiştir.
+---
 
-## Temel Özellikler
+AIQRMenu is a full-stack web application that transforms traditional restaurant menus into an interactive digital experience. By scanning a QR code placed on the table, customers can browse the menu and receive personalized food recommendations through an integrated AI assistant.
 
-* **Entegre Yapay Zeka Garsonu:** Groq API altyapısı ile çalışan akıllı asistan; müşterinin ruh haline, bütçesine veya diyet tercihlerine göre anında menüden ürün önerileri sunar.
-* **Dinamik ve Hızlı Filtreleme:** Sayfa yenilenmesine gerek kalmadan (Asynchronous) çalışan kategori butonları ile anında ürün listeleme.
-* **Premium UI/UX Tasarımı:** Kullanıcı dostu, modern, mobil öncelikli (mobile-first) ve estetik animasyonlara sahip ön yüz.
-* **Tam Otomatik QR Sistemi:** Python tabanlı yerleşik algoritma ile canlı sunucu linkini (Ngrok) anında fiziksel masalara koyulabilecek bir QR koda dönüştürme.
+## Project Overview
 
-## Kullanılan Teknolojiler ve Mimari
+Traditional restaurant menus often make it difficult for customers to quickly find nutritional information, dietary options, or suitable meals. AIQRMenu addresses this by providing an intelligent digital menu where users can instantly filter menu items and receive personalized recommendations based on their preferences.
 
-Bu proje, modern web geliştirme standartlarına uygun olarak tasarlanmıştır:
+## Key Features
 
-* **Backend:** Python, FastAPI (Yüksek performanslı asenkron API yönetimi), Uvicorn (Sunucu)
-* **Yapay Zeka:** Groq API (Gecikmesiz, anlık dil modeli yanıtları)
-* **Frontend:** HTML5, CSS3, Vanilla JavaScript (Harici kütüphane bağımlılığı olmadan saf ve hızlı tasarım)
-* **DevOps & Araçlar:** Ngrok (Yerel sunucuyu internete açma tüneli), qrcode (Dinamik barkod üretimi)
+- **AI-Powered Assistant:** Integrated with the Groq API to provide personalized food recommendations based on the customer's mood, budget, or dietary preferences.
+- **Dynamic Menu Filtering:** Browse menu categories instantly without reloading the page using asynchronous filtering.
+- **Modern User Interface:** Responsive, mobile-first design with a clean user experience and smooth animations.
+- **Automatic QR Code Generation:** Built-in Python-based QR code generator that creates QR codes linked to the live application (via Ngrok), making deployment quick and convenient for restaurants.
 
-## Yerelde Kurulum ve Çalıştırma Rehberi
+## Technology Stack
 
-Projeyi kendi ortamınızda test etmek için sırasıyla şu adımları uygulayabilirsiniz:
+This project was built using modern web development technologies.
 
-**1. Projeyi Klonlayın**
+### Backend
+
+- Python
+- FastAPI
+- Uvicorn
+
+### Artificial Intelligence
+
+- Groq API
+
+### Frontend
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+### Tools
+
+- Ngrok
+- qrcode
+
+## Installation
+
+### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Slhcnats/AIQRMenu.git
 cd AIQRMenu
 ```
-**2. Sanal Ortam Oluşturun ve Gereksinimleri Yükleyin**
+
+### 2. Install Dependencies
+
 ```bash
 pip install fastapi uvicorn groq qrcode[pil]
 ```
-**3. API Yapılandırması**
-```text
-antigravity.py dosyasını açın ve ilgili satıra kendi Groq API anahtarınızı ekleyin.
-```
-**4. Sunucuyu Başlatın**
+
+### 3. Configure the API
+
+Open the `antigravity.py` file and replace the existing API key with your own Groq API key.
+
+### 4. Run the Application
+
 ```bash
 uvicorn antigravity:app --reload
-Sunucu başlatıldıktan sonra tarayıcınızda http://localhost:8000 adresinden veya Ngrok tüneli açarak mobil cihazınızdan projeyi görüntüleyebilirsiniz.
 ```
 
-Geliştirici: Salih Can Ateş | Fırat Üniversitesi - Bilgisayar Mühendisliği
+After starting the server, open:
+
+```
+http://localhost:8000
+```
+
+Alternatively, you can expose the local server using Ngrok and access the application from any mobile device by scanning the generated QR code.
+
+## Developer
+
+**Salih Can Ateş**
+
+Computer Engineering Student
+
+Fırat University
